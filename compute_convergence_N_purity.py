@@ -66,7 +66,7 @@ for node in myTree.postorder_node_iter():
 
 for phylum in global_phylCount:
      if global_phylCount[phylum] > 1 and not ('Candi' in phylum or 'candi' in phylum):
-         print(phylum + " " + str(purity[phylum][0]) + " " + str(convergence[phylum][0]))
+         print(phylum + " " + str(global_phylCount[phylum]) + " " + str(purity[phylum][0]) + " " + str(convergence[phylum][0]))
 #    print(phylum,global_phylCount[phylum])
 
 #print(global_phylCount['Firmicutes'])
