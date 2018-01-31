@@ -16,29 +16,58 @@
 
 
 from sys import argv
-from dendropy import Tree
+import argparse
 
-taxonomyFile = argv[1]
-treefile = argv[2]
-outputFile = argv[3]
+parser = argparse.ArgumentParser()
 
-myTree = Tree.get_from_path(treefile,'newick')
+parser.add_argument("-i","--input",required=True,help="Input file")
+parser.add_argument("-o","--output",required=True,help="Output file")
+parser.add_argument("-m","--mapping",required=False,help="Mapping file")
+parser.add_argument("-d","--delim",required=False,help="Delimiter between the fields")
+
+args = vars(parser.parse_args())
+
+#from dendropy import Tree
+
+taxonomyFile = args["input"]
+#treefile = argv[2]
+outputFile = args["output"]
+
+# optional: to map the genome ID in one database to another, or to restrict the Genome set to a specific subset
+mappingFile = args["mapping"] if args["mapping"] else None
+delim = args["delim"] if args["delim"]  else "\t"
+
+ 
+#myTree = Tree.get_from_path(treefile,'newick')
 nameHash = {}
 
-for node in myTree.leaf_node_iter():
-    nameHash[node.taxon.label] = []
+#for node in myTree.leaf_node_iter():
+#    nameHash[node.taxon.label] = []
+
+if mappingFile is not None:
+    with open(mappingFile) as f:
+        for line in f:
+            fields = line.split()
+            if len(fields) == 1:
+                nameHash[fields[0]] = (fields[0],[])
+            elif len(fields) > 1:
+                nameHash[fields[0]] = (fields[1],[])
 
 with open(taxonomyFile,'r') as fin:
-    titles = fin.readline().split()
+    titles = fin.readline().rstrip().split(delim)
+    print(titles)
     for line in fin:
-        fields = line.split()
+        fields = line.rstrip().split(delim)
+        if mappingFile is None:
+            nameHash[fields[0]] = (fields[0],[])
         if fields[0] in nameHash:
+            #print(nameHash[fields[0]])
             for i in range(1,len(fields)):
                 if fields[i] != '':
-                    nameHash[fields[0]].append((fields[i],titles[i]))
+                    nameHash[fields[0]][1].append((fields[i],titles[i]))
 
 with open(outputFile,'w') as fout:
     for name in nameHash:
-        for (f,t) in nameHash[name]:
-            fout.write(name + " " + f + " " + t + "\n")
+        for (f,t) in nameHash[name][1]:
+            fout.write(nameHash[name][0] + " " + f + " " + t + "\n")
                 
