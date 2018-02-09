@@ -13,7 +13,6 @@ def readTaxonomy(taxFile):
 # G001027285 Proteobacteria Phylum
 # ...
     nameHash = {}
-    #groupHash = {}
        
     with open(taxFile,'r') as fin:
         for line in fin:
@@ -22,10 +21,8 @@ def readTaxonomy(taxFile):
                 nameHash[name] = [(group,title)]
             else:
                 nameHash[name].append((group,title))
-            #if group not in groupHash:
-            #    groupHash[group] = title
 
-    return nameHash#,groupHash
+    return nameHash
 
 def preprocess(tree):
     for node in tree.postorder_node_iter():
@@ -101,12 +98,6 @@ def main():
     myTree = Tree.get_from_path(treefile,"newick")
     groupCount = {}
     
-    '''with open(taxFile,'r') as f:
-        for line in f:
-            fields = line.split()
-            name = fields[0]
-            group = fields[2]
-            nameHash[name] = [group] '''
                 
     nameHash = readTaxonomy(taxFile)
         
@@ -117,8 +108,6 @@ def main():
 
     preprocess(myTree)
 
-    #trpls = {}
-    #quartets = {}
     scores = {}
 # main tasks
     for group in groupCount:
@@ -126,14 +115,16 @@ def main():
             scores[group] = computeScore(myTree,group,groupCount[group],nameHash)
 
     with open(outfile,'w') as fout:
+        fout.write("group level spNum tripl quart\n")
         for group in scores:
              np = myTree.seed_node.nleaf - groupCount[group]
-             p = groupCount[group]
-             ntrpls = np*p*(p-1)/2
-             nquartets = np*(np-1)*p*(p-1)/4
-             trpls = scores[group][0]/(float(ntrpls))
-             quartets = scores[group][1]/(float(nquartets))
-             fout.write(group[0] + " " + group[1] + " " + str(groupCount[group]) + " " + str(trpls) + " " + str(quartets) + "\n")
+             if np > 0:
+                 p = groupCount[group]
+                 ntrpls = np*p*(p-1)/2
+                 nquartets = np*(np-1)*p*(p-1)/4
+                 trpls = scores[group][0]/(float(ntrpls))
+                 quartets = scores[group][1]/(float(nquartets))
+                 fout.write(group[0] + " " + group[1] + " " + str(groupCount[group]) + " " + str(trpls) + " " + str(quartets) + "\n")
   
 if __name__== "__main__":
     main()
