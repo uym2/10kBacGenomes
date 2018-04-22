@@ -13,6 +13,7 @@ mytree.seed_node.depth = 0
 currLevel = 0
 #currIdx = 0
 with open(outfile,"w") as fout:
+    fout.write("br2root d2root support\n")
     for node in mytree.levelorder_node_iter():
         if node is not mytree.seed_node:
             node.level = node.parent_node.level + 1

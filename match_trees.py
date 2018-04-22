@@ -7,16 +7,30 @@
 # a better solution should be LCA mapping, but it takes more effort to implement!
 
 from sys import argv
-from dendropy import Tree
+from dendropy import Tree,TaxonNamespace
 
 treefile1 = argv[1]
 treefile2 = argv[2]
 outfile = argv[3]
 
-tree1 = Tree.get_from_path(treefile1,"newick")
-tree2 = Tree.get_from_path(treefile2,"newick")
+taxa = TaxonNamespace()
+
+tree1 = Tree.get_from_path(treefile1,"newick",taxon_namespace=taxa)
+tree2 = Tree.get_from_path(treefile2,"newick",taxon_namespace=taxa)
 
 
+tree1.encode_bipartitions()
+tree2.encode_bipartitions()
+
+
+mapping1 = tree1.bipartition_edge_map
+mapping2 = tree2.bipartition_edge_map
+
+
+for b in mapping1:
+    mapping2[b].length = mapping1[b].length
+
+'''
 my_branches = []
 
 for node in tree1.levelorder_node_iter():
@@ -26,5 +40,7 @@ currIdx = 0
 for node in tree2.levelorder_node_iter():            
     node.edge_length = my_branches[currIdx]
     currIdx += 1
-    
+'''    
 tree2.write_to_path(outfile,'newick')     
+
+

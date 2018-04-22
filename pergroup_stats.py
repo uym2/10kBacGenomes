@@ -33,8 +33,14 @@ def preprocess(tree):
             for c in node.child_node_iter():
                 node.nleaf += c.nleaf
 
-#def computeTripletScore(tree,groupName,groupSize,nameHash):
-    
+    for node in tree.preorder_node_iter():
+        if node is tree.seed_node:
+            node.br2root = 0
+            node.d2root = 0
+        else:
+            node.br2root = node.parent_node.br2root + 1
+            node.d2root = node.parent_node.d2root + (node.edge_length if node.edge_length else 0)
+                                
 
 def computeScore(tree,groupName,groupSize,nameHash,scoreType='Both'):
 # by default, compute both triplet and quartet scores
@@ -91,7 +97,7 @@ def computeScore(tree,groupName,groupSize,nameHash,scoreType='Both'):
     return quartets if scoreType=='quartet' else (trpls,quartets)
 
 def main():
-    taxFile = argv[1]  # ~/10kBacGenome/repophlan_microbes_ranks.txt
+    taxFile = argv[1] 
     treefile = argv[2]
     outfile = argv[3]
 
