@@ -27,6 +27,8 @@ for node in tree.preorder_node_iter():
 
 tree.write_to_path(collapsedTree,"newick")
 
+print("Finish collapsing tree!")
+
 R = resolve_tree(tree)
 
 with open(outfile,'w') as fout:
