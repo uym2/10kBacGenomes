@@ -19,6 +19,8 @@ def resolve_node(u,S,b):
 
     children = u.child_nodes()
 
+    print(len(S),len(children))
+
     for x in b:
         if x in children:
             u.remove_child(x)
@@ -49,8 +51,8 @@ def resolve_tree(tree):
     for node in tree.preorder_node_iter():
         S = node.child_nodes()
         if  len(S) > 2:
-            C[node] = S
-            B = [ x for x in list_bipartitions(S) if len(x) > 0 and len(S)-len(x) > 1]
+            C[node] = [x for x in S]
+            B = [ x for x in list_bipartitions(S) if len(x) > 0 and (len(S)-len(x)) > 1]
             for j,b in enumerate(B):
                 if j < len(H): 
                     H[j].append((node,b))
@@ -63,7 +65,9 @@ def resolve_tree(tree):
     for T in H:
         for u,b in T:
             resolve_node(u,C[u],b)
+        #print(tree.as_string('newick'))
         R.append(tree.as_string('newick'))
+        print("Added on tree!")
 
     return R
 
@@ -77,8 +81,8 @@ def main():
     R = resolve_tree(t)
    
     
-    for s in R:
-        print(s) 
+    #for s in R:
+    #    print(s) 
     
 if __name__=="__main__":
     main()                

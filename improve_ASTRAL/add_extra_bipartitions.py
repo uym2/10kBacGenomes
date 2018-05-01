@@ -16,18 +16,20 @@ infile = argv[1]
 minSupport = float(argv[2])
 outfile = argv[3] # output
 
-if len(argv) > 4:
-    collapsedTree = argv[4] # output, optional
+collapsedTree = argv[4] if len(argv) > 4 else None
+
 
 tree = Tree.get_from_path(infile,"newick")
 
 for node in tree.preorder_node_iter():
+    node.edge_length = None
     if node.label is not None and float(node.label) < minSupport:
         collapse(node)
 
-tree.write_to_path(collapsedTree,"newick")
+if collapsedTree:
+    tree.write_to_path(collapsedTree,"newick")
 
-print("Finish collapsing tree!")
+print("Finished collapsing tree!")
 
 R = resolve_tree(tree)
 
