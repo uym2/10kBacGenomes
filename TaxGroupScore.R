@@ -3,8 +3,8 @@ require("ggplot2")
 args = commandArgs(TRUE)
 
 infile = args[1]
-outfile_tripl = args[2]
-outfile_quart = args[3]
+#outfile_tripl = args[2]
+outfile_quart = args[2]
 
 d = read.table(infile,header=T)
 d$level <- factor(d$level,levels = c("kingdom","phylum","class","order","family","genus","species","strain"))
@@ -16,13 +16,13 @@ d$level <- factor(d$level,levels = c("kingdom","phylum","class","order","family"
 #  facet_wrap(~level,scales = "free",ncol=6) + 
 #  theme(legend.position = "bottom")
 
-ggplot(d[!d$level %in% c("kingdom","strain"),],aes(x="",y=..count..)) + 
-  geom_bar(aes(fill=cut(tripl,c(0,0.5,0.9,0.95,1,1.001),right = F))) +
-  scale_fill_brewer(palette = "Reds",name="Triplet score",direction = -1)+theme_classic()+
-  facet_wrap(~level,scales = "free",ncol=6) + 
-  theme(legend.position = "bottom")
+#ggplot(d[!d$level %in% c("kingdom","strain"),],aes(x="",y=..count..)) + 
+#  geom_bar(aes(fill=cut(tripl,c(0,0.5,0.9,0.95,1,1.001),right = F))) +
+#  scale_fill_brewer(palette = "Reds",name="Triplet score",direction = -1)+theme_classic()+
+#  facet_wrap(~level,scales = "free",ncol=6) + 
+#  theme(legend.position = "bottom")
 
-ggsave(outfile_tripl)
+#ggsave(outfile_tripl)
 
 ggplot(d[!d$level %in% c("kingdom","strain"),],aes(x="",y=..count..)) + 
   geom_bar(aes(fill=cut(quart,c(0,0.5,0.9,0.95,1,1.001),right = F))) +

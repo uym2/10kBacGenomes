@@ -121,7 +121,8 @@ def main():
             scores[group] = computeScore(myTree,group,groupCount[group],nameHash)
 
     with open(outfile,'w') as fout:
-        fout.write("group level spNum tripl quart\n")
+        #fout.write("group level spNum tripl quart\n")
+        fout.write("group level spNum quart\n")
         for group in scores:
              np = myTree.seed_node.nleaf - groupCount[group]
              if np > 0:
@@ -130,7 +131,8 @@ def main():
                  nquartets = np*(np-1)*p*(p-1)/4
                  trpls = scores[group][0]/(float(ntrpls))
                  quartets = scores[group][1]/(float(nquartets))
-                 fout.write(group[0] + " " + group[1] + " " + str(groupCount[group]) + " " + str(trpls) + " " + str(quartets) + "\n")
+                 #fout.write(group[0] + " " + group[1] + " " + str(groupCount[group]) + " " + str(trpls) + " " + str(quartets) + "\n")
+                 fout.write(group[0] + " " + group[1] + " " + str(groupCount[group]) + " " + " " + str(quartets) + "\n")
   
 if __name__== "__main__":
     main()
