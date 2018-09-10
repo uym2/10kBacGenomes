@@ -1,0 +1,21 @@
+#! /bin/bash
+#SBATCH --job-name="scoreAstral"
+#SBATCH --output="starJob.out"
+#SBATCH --partition=shared
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=2
+#SBATCH --export=ALL
+#SBATCH -t 24:00:00
+#SBATCH -A TG-BIO150043
+#cd /scratch/$USER/$SLURM_JOBID
+
+source /etc/profile.d/modules.sh
+
+module load python
+module load dendropy
+module load R
+module load gnu
+module load gnutools
+
+
+bash add_extra_trees.sh

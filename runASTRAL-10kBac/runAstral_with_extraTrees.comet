@@ -1,0 +1,23 @@
+#!/bin/bash
+#SBATCH --job-name="ASTRAL_gpu"
+#SBATCH --output="ASTRAL_gpu.out"
+#SBATCH --partition=gpu
+#SBATCH --ntasks-per-node=24
+#SBATCH --gres=gpu:4
+#SBATCH --export=ALL
+#SBATCH -t 48:00:00
+#SBATCH --exclude=comet-31-06
+#SBATCH -A TG-ASC150046
+
+
+source /etc/profile.d/modules.sh
+
+module load python
+module load dendropy
+module load R
+module load gnu
+module load gnutools
+
+
+java -Xmx65g -Djava.library.path=/home/umai/my_gits/ASTRAL/Astral/lib -jar /home/umai/my_gits/ASTRAL/Astral/astral.5.12.7beta.jar -i /oasis/projects/nsf/uot138/umai/10k_bac_genome_updated/GeneTrees_raxml_selected/trees/RAxML.bestllh.gtrees -o /oasis/projects/nsf/uot138/umai/10k_bac_genome_updated/GeneTrees_raxml_selected/trees/astral.addExtra.tre -t 2 -e /oasis/projects/nsf/uot138/umai/10k_bac_genome_updated/GeneTrees_raxml_selected/trees/extra.q37.trees.resolved > /oasis/projects/nsf/uot138/umai/10k_bac_genome_updated/GeneTrees_raxml_selected/trees/astral.addExtra.log 2>&1
+
